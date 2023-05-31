@@ -16,11 +16,23 @@ function PokemonPage() {
     setSearch(e.target.value)
   }
   const filteredCards = collection.filter(card=>card.name.toLowerCase().includes(search.toLowerCase()))
+  function addPokemon(newData) {
+    fetch('http://localhost:3001/pokemon', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'accepts': 'application/json'
+      },
+      body: JSON.stringify(newData)
+    })
+    .then(r=>r.json())
+    .then(data=> setCollection([data, ...collection]))
+  }
   return (
     <Container>
       <h1>Pokemon Searcher</h1>
       <br />
-      <PokemonForm />
+      <PokemonForm onAddPokemon={addPokemon} />
       <br />
       <Search onSearch={handleSearch} search={search} />
       <br />
